@@ -1,0 +1,23 @@
+server:
+  port: 8081
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orchestro
+    username: postgres
+    password: GuessFax301#
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      idle-timeout: 30000
+      connection-timeout: 15000
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: org.sample.member.models
+logging:
+  level:
+    org.sample.member: DEBUG
+    org.mybatis: DEBUG
