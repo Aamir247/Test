@@ -1,24 +1,32 @@
-package org.example.member.models;
-
+package org.example.member.model;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-
+@Entity
+@Table(name = "member")
+package org.example.member.models;
+import java.time.LocalDate;
 public class Member {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
-
+    @NotBlank(message = "firstName is mandatory")
+    @Size(max = 100)
     private String firstName;
-
+    @NotBlank(message = "lastName is mandatory")
+    @Size(max = 100)
     private String lastName;
-
+    @NotBlank(message = "email is mandatory")
+    @Email(message = "email must be valid")
     private String email;
-
+    @NotBlank(message = "mobileNumber is mandatory")
+    @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "mobileNumber must be valid")
     private String phone;
     private LocalDate joinDate = LocalDate.now();
     private String status = "active";
-
-    // --- Constructors ---
-    public Member() {
-    }
 
     public Member(String firstName, String lastName, String email, String phone, LocalDate joinDate, String status) {
         this.firstName = firstName;
@@ -86,7 +94,6 @@ public class Member {
         this.status = status;
     }
 
-    // --- toString() ---
     @Override
     public String toString() {
         return "Member{" +
