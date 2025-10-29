@@ -19,7 +19,7 @@ public class MemberService {
         return member;
     }
 
-    public List<Member> createMembers(List<Member> members) {
+    public List<Member> createBulkMembers(List<Member> members) {
         for (Member m : members) {
             if (m.getJoinDate() == null) {
                 m.setJoinDate(LocalDate.now());
