@@ -1,7 +1,9 @@
 package org.example.member.repositories;
+
 import org.apache.ibatis.annotations.*;
 import org.example.member.models.Member;
 import java.util.List;
+
 @Mapper
 public interface MemberRepository {
 
@@ -28,7 +30,9 @@ public interface MemberRepository {
 
     @Select("SELECT member_id AS memberId, first_name AS firstName, last_name AS lastName, " +
             "email, phone, join_date AS joinDate, status " +
-            "FROM meta.member ORDER BY member_id LIMIT #{limit} OFFSET #{offset}")
+            "FROM meta.member " +
+            "ORDER BY member_id " +
+            "LIMIT #{limit} OFFSET #{offset}")
     List<Member> findAll(@Param("limit") int limit, @Param("offset") int offset);
 
     @Update("UPDATE meta.member SET first_name = #{firstName}, last_name = #{lastName}, " +
@@ -49,7 +53,6 @@ public interface MemberRepository {
     })
     int deleteByIds(@Param("ids") List<Long> ids);
 
-    // COUNT: Total records
     @Select("SELECT COUNT(*) FROM meta.member")
     int countAll();
 }
