@@ -5,39 +5,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
     @Autowired
     MemberService memberService;
+
     @PostMapping
     public ResponseEntity<Member> createMember(@RequestBody Member member){
-        Member createMember=memberService.createMember(member);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createMember);
+        Member createdMember = memberService.createMember(member);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdMember);
     }
-    @PostMapping
-    public String createMember(@RequestBody Member member) {
-        memberService.save(member);
-        return "Member added successfully!";
-    }
+
     @GetMapping
-    public List<Member> getAllMembers() {
-        return memberService.findAll();
+    public List<Member> getAllMembers(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return memberService.getMembers(page, size);
     }
-    @GetMapping("/api/member")
+
+    @GetMapping("/{id}")
     public Member getMemberById(@PathVariable Long id) {
-        return memberService.findById(id);
+        return memberService.getMemberById(id);
     }
-    @PutMapping("/api/member")
-    public String updateMember(@PathVariable Long id, @RequestBody Member member) {
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member member) {
         member.setMemberId(id);
-        boolean updated = memberService.update(member);
-        return updated ? "Member updated successfully!" : "Member not found!";
+        Member updated = memberService.updateMember(member);
+        return updated != null ?
+                ResponseEntity.ok(updated) :
+                ResponseEntity.notFound().build();
     }
-    @DeleteMapping("/api/member")
-    public String deleteMember(@PathVariable Long id) {
-        boolean deleted = memberService.delete(id);
-        return deleted ? "Member deleted successfully!" : "Member not found!";
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMember(@PathVariable Long id) {
+        boolean deleted = memberService.deleteMember(id);
+        return deleted ?
+                ResponseEntity.ok("Member deleted successfully!") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found!");
     }
 }
-
